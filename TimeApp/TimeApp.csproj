@@ -97,6 +97,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Station.cs" />
     <Compile Include="Models\TimeAppContext.cs" />
     <Compile Include="Models\TrainConnection.cs" />
