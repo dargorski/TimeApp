@@ -87,6 +87,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\app.js" />
+    <Content Include="app\knockout-3.4.2.js" />
+    <Content Include="app\model\StationModel.js" />
+    <Content Include="app\model\TimetableTreeModel.js" />
+    <Content Include="app\store\Store.js" />
+    <Content Include="app\view\TimetableTreeGrid.js" />
+    <Content Include="app\view\Viewport.js" />
+    <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
   </ItemGroup>
