@@ -87,25 +87,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\app.js" />
-    <Content Include="app\images\delete.png" />
-    <Content Include="app\knockout-3.4.2.js" />
-    <Content Include="app\model\StationModel.js" />
-    <Content Include="app\model\TimetableTreeModel.js" />
-    <Content Include="app\store\StationStore.js" />
-    <Content Include="app\store\TimetableTreeStore.js" />
-    <Content Include="app\view\StationGrid.js" />
-    <Content Include="app\view\TimetableForm.js" />
-    <Content Include="app\view\TimetableTreeGrid.js" />
-    <Content Include="app\view\Viewport.css" />
-    <Content Include="app\view\Viewport.js" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\StationsController.cs" />
     <Compile Include="Controllers\TrainConnectionDTO.cs" />
     <Compile Include="Controllers\TrainConnectionItemDTO.cs" />
     <Compile Include="Controllers\TrainConnectionsController.cs" />

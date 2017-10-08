@@ -3,7 +3,15 @@
     alias: 'widget.TimetableTreeGrid',
     initComponent: function () {
 
+        this.id = "trainConnectionGrid";
+        this.title = 'Routes timetable';
+        this.reserveScrollbar = true;
+        this.collapsible = true;
+        this.loadMask = true;
+        this.useArrows = true;
+        this.rootVisible = false;
         this.store = "TrainTimetableApp.store.TimetableTreeStore";
+        this.animate = false;
 
         this.columns = [{
             xtype: 'treecolumn',
