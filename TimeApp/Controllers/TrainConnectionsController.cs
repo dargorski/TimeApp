@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -18,62 +19,33 @@ namespace TimeApp.Controllers
         private TimeAppContext db = new TimeAppContext();
 
         // GET: api/TrainConnections
-        public IQueryable<TrainConnection> GetTrainConnections()
+        public TrainConnectionDTO GetTrainConnections()
         {
-            return db.TrainConnections;
-        }
+            List<TrainConnectionItemDTO> itemList = new List<TrainConnectionItemDTO>();
 
-        // GET: api/TrainConnections/5
-        [ResponseType(typeof(TrainConnection))]
-        public async Task<IHttpActionResult> GetTrainConnection(int id)
-        {
-            TrainConnection trainConnection = await db.TrainConnections.FindAsync(id);
-            if (trainConnection == null)
+            DbSet<TrainConnection> results = db.TrainConnections;
+            foreach (TrainConnection trainConnection in results)
             {
-                return NotFound();
-            }
-
-            return Ok(trainConnection);
-        }
-
-        // PUT: api/TrainConnections/5
-        [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutTrainConnection(int id, TrainConnection trainConnection)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != trainConnection.Id)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(trainConnection).State = EntityState.Modified;
-
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TrainConnectionExists(id))
+                List<TrainConnectionItemDTO> stations = new List<TrainConnectionItemDTO>();
+                foreach (Station station in trainConnection.Stations)
                 {
-                    return NotFound();
+                    stations.Add(new TrainConnectionItemDTO() { TrainId = -station.Id, Station = station.Name, ArrivalTime = station.ArrivalTime?.ToString("HH:mm"), DepartureTime = station.DepartureTime?.ToString("HH:mm"), leaf = true });
                 }
-                else
-                {
-                    throw;
-                }
+
+                String route = trainConnection.Start + " - " + trainConnection.Destination;
+                TrainConnectionItemDTO item = new TrainConnectionItemDTO() { TrainId = trainConnection.Id, TrainName = trainConnection.Name, Route = route, Type = trainConnection.ConnectionType.ToString(), leaf = false, children = stations };
+                itemList.Add(item);
             }
 
-            return StatusCode(HttpStatusCode.NoContent);
+            TrainConnectionDTO dto = new TrainConnectionDTO() { TrainId = "root", leaf = false, children = itemList };
+
+            return dto;
+
         }
 
         // POST: api/TrainConnections
         [ResponseType(typeof(TrainConnection))]
-        public async Task<IHttpActionResult> PostTrainConnection(TrainConnection trainConnection)
+        public IHttpActionResult PostTrainConnection(TrainConnection trainConnection)
         {
             if (!ModelState.IsValid)
             {
@@ -81,39 +53,42 @@ namespace TimeApp.Controllers
             }
 
             db.TrainConnections.Add(trainConnection);
-            await db.SaveChangesAsync();
+            db.SaveChanges();
 
             return CreatedAtRoute("DefaultApi", new { id = trainConnection.Id }, trainConnection);
         }
 
-        // DELETE: api/TrainConnections/5
+        // DELETE: api/TrainConnections/
         [ResponseType(typeof(TrainConnection))]
-        public async Task<IHttpActionResult> DeleteTrainConnection(int id)
+        public IHttpActionResult DeleteTrainConnection([FromBody]Object idObject)
         {
-            TrainConnection trainConnection = await db.TrainConnections.FindAsync(id);
+
+            int id;
+
+            if (idObject.GetType() == typeof(JObject))
+            {
+                JObject jsonObject = (JObject)idObject;
+                id = (int)jsonObject.GetValue("TrainId");
+            }
+            else
+            {
+                JArray jsonArray = (JArray)idObject;
+                JToken jsonToken = jsonArray[0];
+                id = (int)jsonToken["TrainId"];
+            }
+
+            TrainConnection trainConnection = db.TrainConnections.Find(id);
             if (trainConnection == null)
             {
                 return NotFound();
             }
 
             db.TrainConnections.Remove(trainConnection);
-            await db.SaveChangesAsync();
+            db.SaveChanges();
 
             return Ok(trainConnection);
+
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        private bool TrainConnectionExists(int id)
-        {
-            return db.TrainConnections.Count(e => e.Id == id) > 0;
-        }
     }
 }

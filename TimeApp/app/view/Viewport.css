@@ -1,0 +1,7 @@
+﻿.x-table-layout-cell{
+    vertical-align: top !important;
+}
+
+.x-grid-header-ct.x-docked {
+    z-index: inherit !important;
+}
