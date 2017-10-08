@@ -1,7 +1,7 @@
-﻿Ext.define('TimeApp.store.StationStore', {
+﻿Ext.define('TrainTimetableApp.store.StationStore', {
     extend: 'Ext.data.Store',
     autoDestroy: true,
-    model: 'TimeApp.model.StationModel',
+    model: 'TrainTimetableApp.model.StationModel',
     proxy: {
         type: 'memory'
     },
