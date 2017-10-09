@@ -93,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\StationsController.cs" />
     <Compile Include="Controllers\TrainConnectionDTO.cs" />
     <Compile Include="Controllers\TrainConnectionItemDTO.cs" />
     <Compile Include="Controllers\TrainConnectionsController.cs" />
